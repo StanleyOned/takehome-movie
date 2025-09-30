@@ -50,7 +50,7 @@ extension Movie {
   }
 
   var formattedReleaseDate: String {
-    guard !releaseDate.isEmpty else { return "TBA" }
+    guard !releaseDate.isEmpty else { return Strings.Movie.tbaDescription }
     return releaseDate.formattedReleaseDate
   }
 
@@ -64,7 +64,7 @@ extension Movie {
 
   /// From the documentation it appears that overview can be an Empty string.
   var displayOverview: String {
-    guard !overview.isEmpty else { return "No overview available." }
+    guard !overview.isEmpty else { return Strings.Movie.noOverview }
     return overview
   }
 }

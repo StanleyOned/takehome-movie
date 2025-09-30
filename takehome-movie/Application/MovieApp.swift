@@ -12,14 +12,13 @@ import SwiftUI
 struct MovieApp: App {
   
   // MARK: - Properties
-  
-  private let appStateContainer = AppStateContainer()
+  @StateObject private var appStateContainer = AppStateContainer()
   
   // MARK: - Body
   
   var body: some Scene {
     WindowGroup {
-      MovieSearchView(service: NetworkMovieSearchService(appStateContainer.apiClient))
+      AppCoordinatorView(service: appStateContainer.movieService())
     }
   }
 }

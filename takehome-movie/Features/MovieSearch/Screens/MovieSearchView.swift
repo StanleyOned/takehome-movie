@@ -12,6 +12,7 @@ struct MovieSearchView: View {
   
   // MARK: - Public Properties
   
+  @EnvironmentObject var coordinator: AppCoordinator
   @StateObject private var viewModel: MovieSearchViewModel
   
   init(service: MovieSearchService) {
@@ -20,27 +21,24 @@ struct MovieSearchView: View {
   
   // MARK: - Body
   
-  // TODO: Move strings to view model and their own String file.
   var body: some View {
-    NavigationStack {
-      VStack {
-        switch viewModel.viewState {
-        case .loading:
-          ProgressView()
-        case .loaded:
-          if viewModel.movies.isEmpty {
-            SearchEmptyView(text: viewModel.noResultsMessage)
-          } else {
-            listView
-          }
-        case .idle:
-          Text(viewModel.searchMessage)
-        case .error:
-          SearchErrorView(title: viewModel.alertMessage)
+    VStack {
+      switch viewModel.viewState {
+      case .loading:
+        ProgressView()
+      case .loaded:
+        if viewModel.movies.isEmpty {
+          SearchEmptyView(text: viewModel.noResultsMessage)
+        } else {
+          listView
         }
+      case .idle:
+        Text(viewModel.searchMessage)
+      case .error:
+        SearchErrorView(title: viewModel.alertMessage)
       }
-      .navigationTitle(viewModel.title)
     }
+    .navigationTitle(viewModel.title)
     .searchable(text: $viewModel.searchQuery, prompt: viewModel.placeholderText)
   }
 }
@@ -51,10 +49,15 @@ private extension MovieSearchView {
   
   var listView: some View {
     List(viewModel.movies) { movie in
-      MovieRowView(movie: movie)
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets())
-        .padding(.horizontal, .interval16)
+      Button {
+        coordinator.push(page: .movieDetail(movieID: movie.id))
+      } label: {
+        MovieRowView(movie: movie)
+          .listRowSeparator(.hidden)
+          .listRowInsets(EdgeInsets())
+          .padding(.horizontal, .interval16)
+      }
+
     }
     .listStyle(PlainListStyle())
   }

@@ -13,6 +13,13 @@ import Foundation
 /// To handle string and assets generation.
 struct Strings {
   
+  // MARK: - Movie Model
+  
+  struct Movie {
+    static let noOverview = "No overview available"
+    static let tbaDescription = "TBA"
+  }
+  
   // MARK: - Movie search
   
   struct MovieSearch {
