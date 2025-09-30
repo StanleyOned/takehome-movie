@@ -48,6 +48,11 @@ struct RequestBuilder: Buildable {
   func replacingPathPlacerholder(_ variable: String, with value: String) -> Self {
     mutating(\.path, to: path.replacingOccurrences(of: "%\(variable)%", with: value))
   }
+  
+  @discardableResult
+  func queryItems(_ queryItems: [String: Any]) -> Self {
+    mutating(\.queryItems, to: queryItems)
+  }
 }
 
 // MARK: - URL Generation
@@ -87,6 +92,10 @@ extension RequestBuilder {
         URLQueryItem(name: $0.key, value: String(describing: $0.value))
       }
     }
+    
+    // Append APIKey
+    urlComponents.queryItems?.append(URLQueryItem(name: "api_key",
+                                                  value: Configuration.apiKey))
     
     return urlComponents.url
   }

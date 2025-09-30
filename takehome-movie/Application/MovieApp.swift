@@ -7,11 +7,19 @@
 
 import SwiftUI
 
+/// Main app view
 @main
 struct MovieApp: App {
+  
+  // MARK: - Properties
+  
+  private let appStateContainer = AppStateContainer()
+  
+  // MARK: - Body
+  
   var body: some Scene {
     WindowGroup {
-      MovieSearchView()
+      MovieSearchView(service: NetworkMovieSearchService(appStateContainer.apiClient))
     }
   }
 }

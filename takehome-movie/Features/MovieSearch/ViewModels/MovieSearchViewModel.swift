@@ -18,20 +18,34 @@ final class MovieSearchViewModel: ObservableObject {
       onSearchTextChanged()
     }
   }
-  var viewState: ViewState = .idle
+  @Published var viewState: ViewState = .idle
+  @Published var showAlert = false
+  @Published var alertMessage: String = ""
   
+  var searchMessage = Strings.MovieSearch.startSearching
+  var title = Strings.MovieSearch.title
+  var noResultsMessage = Strings.MovieSearch.noResults
+  var placeholderText = Strings.MovieSearch.placeholder
+
   private var timer: Timer?
+  private let service: MovieSearchService
   
   enum ViewState {
     case idle
     case loading
     case loaded
+    case error
   }
   
   // MARK: - Init
   
-  init () {
-    
+  init (service: MovieSearchService) {
+    self.service = service
+  }
+  
+  func hideAlert() {
+    showAlert = false
+    alertMessage = ""
   }
 }
 
@@ -39,9 +53,17 @@ final class MovieSearchViewModel: ObservableObject {
 
 private extension MovieSearchViewModel {
   
-  func searchMovies() {
-    // TODO: Add API Call
-    
+  @MainActor
+  func searchMovies() async {
+    do {
+      let movieResult = try await service.fetchMovies(query: searchQuery)
+      self.movies = movieResult.results
+      viewState = .loaded
+    } catch {
+      alertMessage = Strings.MovieSearch.errorMessage
+      showAlert = true
+      viewState = .error
+    }
   }
   
   func onSearchTextChanged() {
@@ -56,7 +78,9 @@ private extension MovieSearchViewModel {
         return
       }
       viewState = .loading
-      self.searchMovies()
+      Task {
+        await self.searchMovies()
+      }
     })
   }
 }

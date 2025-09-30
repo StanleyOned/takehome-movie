@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+/// Cell/row view for Movies shown in the MovieSearchView
 struct MovieRowView: View {
+  
+  // MARK: - Properties
   let movie: Movie
   
+  // MARK: - Body
+  
   var body: some View {
-    HStack(spacing: .interval12) {
+    HStack(alignment: .top, spacing: .interval12) {
       AsyncImage(url: movie.fullPosterURL) { image in
         image
           .resizable()
@@ -24,18 +29,18 @@ struct MovieRowView: View {
               .foregroundColor(.gray)
           )
       }
-      .frame(width: 60, height: 90)
+      .frame(width: 70, height: 100)
       .clipped()
       .cornerRadius(8)
       
       VStack(alignment: .leading, spacing: .interval4) {
         Text(movie.title)
-          .font(.headline)
+          .setStyle(.heading1)
           .foregroundColor(.primary)
           .lineLimit(2)
         
         Text(movie.releaseYear)
-          .font(.subheadline)
+          .setStyle(.heading2)
           .foregroundColor(.secondary)
         
         Spacer()

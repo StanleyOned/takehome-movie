@@ -12,7 +12,11 @@ struct MovieSearchView: View {
   
   // MARK: - Public Properties
   
-  @StateObject private var viewModel: MovieSearchViewModel = .init()
+  @StateObject private var viewModel: MovieSearchViewModel
+  
+  init(service: MovieSearchService) {
+    _viewModel = StateObject(wrappedValue: MovieSearchViewModel(service: service))
+  }
   
   // MARK: - Body
   
@@ -24,19 +28,20 @@ struct MovieSearchView: View {
         case .loading:
           ProgressView()
         case .loaded:
-          listView
           if viewModel.movies.isEmpty {
-            SearchEmptyView(text: "No Results")
+            SearchEmptyView(text: viewModel.noResultsMessage)
           } else {
             listView
           }
         case .idle:
-          Text("Start searching...")
+          Text(viewModel.searchMessage)
+        case .error:
+          SearchErrorView(title: viewModel.alertMessage)
         }
       }
-      .navigationTitle("Movie Search")
+      .navigationTitle(viewModel.title)
     }
-    .searchable(text: $viewModel.searchQuery, prompt: "Search")
+    .searchable(text: $viewModel.searchQuery, prompt: viewModel.placeholderText)
   }
 }
 
@@ -48,11 +53,13 @@ private extension MovieSearchView {
     List(viewModel.movies) { movie in
       MovieRowView(movie: movie)
         .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
+        .padding(.horizontal, .interval16)
     }
     .listStyle(PlainListStyle())
   }
 }
 
 #Preview {
-  MovieSearchView()
+  MovieSearchView(service: NetworkMovieSearchService(APIClient()))
 }

@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Simple text style representation for this application
 struct TextStyle {
-  /// For the purpose of this take home we will use a native font SF Pro Text
-  var fontFamily: String = "SF Pro Text"
+  /// Using Baskerville for an elegant, cinematic feel
+  var fontFamily: String = "Baskerville"
   /// Size of the font
   let fontSize: CGFloat
   /// Weight of the font
@@ -23,11 +23,10 @@ struct TextStyle {
 
 struct TextStyleModifier: ViewModifier {
   let textStyle: TextStyle
-  
+
   func body(content: Content) -> some View {
     content
-      .font(Font.custom(textStyle.fontFamily,
-                        size: textStyle.fontSize)
+      .font(Font.custom(textStyle.fontFamily, size: textStyle.fontSize)
         .weight(textStyle.fontWeight))
   }
 }

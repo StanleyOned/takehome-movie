@@ -13,6 +13,24 @@ import Foundation
 /// To handle string and assets generation.
 struct Strings {
   
+  // MARK: - Movie search
+  
+  struct MovieSearch {
+    static let title = "Movie Search"
+    static let placeholder = "Search for a movie..."
+    static let noResults = "No results found"
+    static let errorMessage = "Something went wrong! please try again later"
+    static let startSearching = "Start searching for movies..."
+  }
+  
+  struct MovieDetailView {
+    static let errorTitle = "Error"
+    static let ok = "Ok"
+    static let errorMessage = "Failed to load movie details, please try again later"
+    static let viewerRating = "Viewer rating"
+    static let overview = "Overview"
+  }
+  
   // MARK: - Network Error strings
   
   struct NetworkError {
