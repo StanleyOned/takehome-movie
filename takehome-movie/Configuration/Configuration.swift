@@ -19,7 +19,6 @@ enum Configuration {
     guard apiKey != "YOUR_TMDB_API_KEY_HERE" else {
       fatalError("Please add your actual TMDB API key to Config/Secrets.xcconfig")
     }
-    
     return apiKey
   }
 }
