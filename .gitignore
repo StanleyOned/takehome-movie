@@ -1,0 +1,17 @@
+# Secrets
+Config/Secrets.xcconfig
+Secrets.xcconfig
+
+# Xcode user-specific files
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+
+# Build artifacts
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+
+# macOS
+.DS_Store
