@@ -20,9 +20,12 @@ cd takehome-movie
 Run the setup script:
 ```bash
 ./scripts/setup.sh
+```
 
 Then open Config/Secrets.xcconfig and add your TMDB API key:
+```
 TMDB_API_KEY = your-actual-api-key-here
+```
 
 ### 3. Open and Run
 open takehome-movie.xcodeproj
