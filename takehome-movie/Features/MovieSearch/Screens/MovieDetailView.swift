@@ -76,7 +76,7 @@ private extension MovieDetailView {
       }
       .frame(width: 120, height: 180)
       .clipped()
-      .cornerRadius(.interval8)
+      .cornerRadius(.borderRadiusSmall)
       
       VStack(alignment: .leading, spacing: .interval8) {
         Text(movie.title)

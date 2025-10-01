@@ -21,6 +21,10 @@ final class APIClient {
     sessionConfiguration.timeoutIntervalForRequest = 30
     self.session = URLSession(configuration: sessionConfiguration)
   }
+
+  init(session: URLSession) {
+    self.session = session
+  }
   
   /// Perform a dataTask request using the below parameters
   /// - Parameters:

@@ -16,37 +16,40 @@ struct MovieRowView: View {
   // MARK: - Body
   
   var body: some View {
-    HStack(alignment: .top, spacing: .interval12) {
-      AsyncImage(url: movie.fullPosterURL) { image in
-        image
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-      } placeholder: {
-        Rectangle()
-          .fill(Color.gray.opacity(0.3))
-          .overlay(
-            Image(systemName: "photo")
-              .foregroundColor(.gray)
-          )
-      }
-      .frame(width: 70, height: 100)
-      .clipped()
-      .cornerRadius(8)
-      
-      VStack(alignment: .leading, spacing: .interval4) {
-        Text(movie.title)
-          .setStyle(.heading1)
-          .foregroundColor(.primary)
-          .lineLimit(2)
+    VStack {
+      HStack(alignment: .top, spacing: .interval12) {
+        AsyncImage(url: movie.fullPosterURL) { image in
+          image
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+        } placeholder: {
+          Rectangle()
+            .fill(Color.gray.opacity(0.3))
+            .overlay(
+              Image(systemName: "photo")
+                .foregroundColor(.gray)
+            )
+        }
+        .frame(width: 70, height: 100)
+        .clipped()
+        .cornerRadius(.borderRadiusSmall)
         
-        Text(movie.releaseYear)
-          .setStyle(.heading2)
-          .foregroundColor(.secondary)
-        
+        VStack(alignment: .leading, spacing: .interval4) {
+          Text(movie.title)
+            .setStyle(.heading1)
+            .foregroundColor(.primary)
+            .lineLimit(2)
+          
+          Text(movie.releaseYear)
+            .setStyle(.heading2)
+            .foregroundColor(.secondary)
+          
+          Spacer()
+        }
         Spacer()
       }
-      Spacer()
+      .padding(.vertical, .interval8)
+      Divider()
     }
-    .padding(.vertical, .interval8)
   }
 }

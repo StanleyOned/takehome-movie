@@ -68,14 +68,13 @@ private extension MovieSearchView {
   
   var listView: some View {
     List(viewModel.movies) { movie in
-      Button {
-        viewModel.navigateToDetail(for: movie)
-      } label: {
-        MovieRowView(movie: movie)
-          .listRowSeparator(.hidden)
-          .listRowInsets(EdgeInsets())
-          .padding(.horizontal, .interval16)
-      }
+      MovieRowView(movie: movie)
+        .listRowSeparator(.hidden)
+        .padding(.horizontal, .interval0)
+        .contentShape(Rectangle())
+        .onTapGesture {
+          viewModel.navigateToDetail(for: movie)
+        }
     }
     .listStyle(PlainListStyle())
   }

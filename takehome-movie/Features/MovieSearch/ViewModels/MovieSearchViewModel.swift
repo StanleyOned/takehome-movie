@@ -25,7 +25,7 @@ final class MovieSearchViewModel: ObservableObject {
 
   private var timer: Timer?
   private let service: MovieSearchService
-  private let coordinator: AppCoordinator
+  private let coordinator: AppCoordinator?
   
   enum ViewState {
     case idle
@@ -36,7 +36,7 @@ final class MovieSearchViewModel: ObservableObject {
   
   // MARK: - Init
   
-  init (service: MovieSearchService, coordinator: AppCoordinator) {
+  init (service: MovieSearchService, coordinator: AppCoordinator?) {
     self.service = service
     self.coordinator = coordinator
   }
@@ -47,7 +47,7 @@ final class MovieSearchViewModel: ObservableObject {
   }
   
   func navigateToDetail(for movie: Movie) {
-    coordinator.push(page: .movieDetail(movieID: movie.id))
+    coordinator?.push(page: .movieDetail(movieID: movie.id))
   }
   
   func onSearchTextChanged() {
