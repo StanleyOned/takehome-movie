@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// App coordinator view
-struct AppCoordinatorView: View {
+/// Main Appview
+struct AppView: View {
   
   // MARK: - Properties
   
@@ -25,7 +25,7 @@ struct AppCoordinatorView: View {
   
   var body: some View {
     NavigationStack(path: $coordinator.path) {
-      MovieSearchView(service: service)
+      MovieSearchView(service: service, coordinator: coordinator)
         .navigationDestination(for: AppRoute.self) { route in
         switch route {
         case .movieDetail(let movieID):
@@ -35,6 +35,5 @@ struct AppCoordinatorView: View {
         }
       }
     }
-    .environmentObject(coordinator)
   }
 }

@@ -18,7 +18,7 @@ struct MovieApp: App {
   
   var body: some Scene {
     WindowGroup {
-      AppCoordinatorView(service: appStateContainer.movieService())
+      AppView(service: appStateContainer.movieService())
     }
   }
 }

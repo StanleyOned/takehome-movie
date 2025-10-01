@@ -9,23 +9,23 @@ import SwiftUI
 
 /// View for Movie search feature
 struct MovieSearchView: View {
-  
+
   // MARK: - Public Properties
-  
-  @EnvironmentObject var coordinator: AppCoordinator
+
   @StateObject private var viewModel: MovieSearchViewModel
   
-  init(service: MovieSearchService) {
-    _viewModel = StateObject(wrappedValue: MovieSearchViewModel(service: service))
+  init(service: MovieSearchService, coordinator: AppCoordinator) {
+    _viewModel = StateObject(wrappedValue: MovieSearchViewModel(service: service, coordinator: coordinator))
   }
   
   // MARK: - Body
   
   var body: some View {
-    VStack {
+    VStack(spacing: .interval0) {
+      searchBarView
       switch viewModel.viewState {
       case .loading:
-        ProgressView()
+        loadingView
       case .loaded:
         if viewModel.movies.isEmpty {
           SearchEmptyView(text: viewModel.noResultsMessage)
@@ -33,13 +33,12 @@ struct MovieSearchView: View {
           listView
         }
       case .idle:
-        Text(viewModel.searchMessage)
+        idleView
       case .error:
-        SearchErrorView(title: viewModel.alertMessage)
+        errorView
       }
     }
     .navigationTitle(viewModel.title)
-    .searchable(text: $viewModel.searchQuery, prompt: viewModel.placeholderText)
   }
 }
 
@@ -47,22 +46,48 @@ struct MovieSearchView: View {
 
 private extension MovieSearchView {
   
+  @ViewBuilder
+  var loadingView: some View {
+    Spacer()
+    ProgressView()
+    Spacer()
+  }
+  
+  var searchBarView: some View {
+    SearchBarView(text: $viewModel.searchQuery,
+                  placeholder: viewModel.placeholderText,
+                  onTextChanged: viewModel.onSearchTextChanged)
+  }
+  
+  @ViewBuilder
+  var errorView: some View {
+    Spacer()
+    SearchErrorView(title: viewModel.alertMessage)
+    Spacer()
+  }
+  
   var listView: some View {
     List(viewModel.movies) { movie in
       Button {
-        coordinator.push(page: .movieDetail(movieID: movie.id))
+        viewModel.navigateToDetail(for: movie)
       } label: {
         MovieRowView(movie: movie)
           .listRowSeparator(.hidden)
           .listRowInsets(EdgeInsets())
           .padding(.horizontal, .interval16)
       }
-
     }
     .listStyle(PlainListStyle())
+  }
+  
+  @ViewBuilder
+  var idleView: some View {
+    Spacer()
+    Text(viewModel.searchMessage)
+    Spacer()
   }
 }
 
 #Preview {
-  MovieSearchView(service: NetworkMovieSearchService(APIClient()))
+  MovieSearchView(service: NetworkMovieSearchService(APIClient()), coordinator: AppCoordinator())
 }

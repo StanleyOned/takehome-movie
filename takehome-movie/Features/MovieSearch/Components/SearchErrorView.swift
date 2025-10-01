@@ -28,6 +28,7 @@ struct SearchErrorView: View {
         .setStyle(.heading1)
         .multilineTextAlignment(.center)
     }
+    .padding(.horizontal, .interval12)
   }
 }
 

@@ -13,11 +13,7 @@ final class MovieSearchViewModel: ObservableObject {
   // MARK: - Properties
   
   @Published var movies: [Movie] = []
-  @Published var searchQuery: String = "" {
-    didSet {
-      onSearchTextChanged()
-    }
-  }
+  @Published var searchQuery: String = ""
   @Published var viewState: ViewState = .idle
   @Published var showAlert = false
   @Published var alertMessage: String = ""
@@ -29,6 +25,7 @@ final class MovieSearchViewModel: ObservableObject {
 
   private var timer: Timer?
   private let service: MovieSearchService
+  private let coordinator: AppCoordinator
   
   enum ViewState {
     case idle
@@ -39,13 +36,40 @@ final class MovieSearchViewModel: ObservableObject {
   
   // MARK: - Init
   
-  init (service: MovieSearchService) {
+  init (service: MovieSearchService, coordinator: AppCoordinator) {
     self.service = service
+    self.coordinator = coordinator
   }
   
   func hideAlert() {
     showAlert = false
     alertMessage = ""
+  }
+  
+  func navigateToDetail(for movie: Movie) {
+    coordinator.push(page: .movieDetail(movieID: movie.id))
+  }
+  
+  func onSearchTextChanged() {
+    timer?.invalidate()
+    if searchQuery.isEmpty {
+      movies = []
+      viewState = .idle
+      return
+    }
+    viewState = .loading
+
+    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
+      guard let self, !searchQuery.isEmpty else {
+        self?.movies = []
+        self?.viewState = .idle
+        return
+      }
+      viewState = .loading
+      Task {
+        await self.searchMovies()
+      }
+    })
   }
 }
 
@@ -64,23 +88,5 @@ private extension MovieSearchViewModel {
       showAlert = true
       viewState = .error
     }
-  }
-  
-  func onSearchTextChanged() {
-    timer?.invalidate()
-    if !searchQuery.isEmpty {
-      viewState = .loading
-    }
-    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
-      guard let self, !searchQuery.isEmpty else {
-        self?.movies = []
-        self?.viewState = .idle
-        return
-      }
-      viewState = .loading
-      Task {
-        await self.searchMovies()
-      }
-    })
   }
 }
