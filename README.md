@@ -52,3 +52,13 @@ Built with **SwiftUI** for the user interface and **ObservableObject** with `@Pu
 ### Testing & Quality
 
 The project includes extensive unit test coverage with separate test files for ViewModels, Models, and Network layer. Mock implementations provide clean test isolation, with proper async/await testing patterns and comprehensive error scenario coverage. The codebase demonstrates production-ready practices including secure API key management and localized strings.
+
+## 🎥 Demo
+
+### Project Walkthrough
+
+[![Project Walkthrough](https://img.youtube.com/vi/b2Ysl8GZstY/0.jpg)](https://youtu.be/b2Ysl8GZstY)
+
+### Coding Session Recording: using AI
+
+[![Coding Session Recording: using AI](https://img.youtube.com/vi/-H3qnEmyYik/0.jpg)](https://youtu.be/-H3qnEmyYik)
