@@ -11,13 +11,15 @@ A native iOS app for browsing movies using The Movie Database (TMDB) API.
 ## 🚀 Setup Instructions
 
 ### 1. Clone the repository from your terminal
+```bash
 git clone https://github.com/stanleyoned/takehome-movie.git
 
 cd takehome-movie
+```
 
 ### 2. Configure your API key
 
-Run the setup script:
+Run the setup script on the project directory:
 ```bash
 ./scripts/setup.sh
 ```
