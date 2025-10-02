@@ -30,6 +30,7 @@ final class MovieSearchViewModelTests: XCTestCase {
   
   // MARK: - Tests
 
+  @MainActor
   func testSearchMoviesSuccess() async {
     // Given
     let expectedMovies = [
@@ -38,46 +39,32 @@ final class MovieSearchViewModelTests: XCTestCase {
     let expectedResult = MovieResult(page: 1, results: expectedMovies, totalPages: 1, totalResults: 1)
     mockService.mockResult = .success(expectedResult)
 
-    await MainActor.run {
-      viewModel.searchQuery = "test"
-    }
-
     // When
-    await MainActor.run {
-      viewModel.onSearchTextChanged()
-    }
-    try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second to ensure timer completes
+    viewModel.searchQuery = "test"
+    viewModel.onSearchTextChanged()
+    try? await Task.sleep(nanoseconds: 1_000_000_000)
 
     // Then
-    await MainActor.run {
-      XCTAssertEqual(viewModel.movies.count, 1)
-      XCTAssertEqual(viewModel.movies.first?.title, "Test Movie")
-      XCTAssertEqual(viewModel.viewState, .loaded)
-      XCTAssertFalse(viewModel.showAlert)
-    }
+    XCTAssertEqual(viewModel.movies.count, 1)
+    XCTAssertEqual(viewModel.movies.first?.title, "Test Movie")
+    XCTAssertEqual(viewModel.viewState, .loaded)
   }
 
+  @MainActor
   func testSearchMoviesFailure() async {
     // Given
     mockService.mockResult = .failure(NetworkError.invalidResponse)
-
-    await MainActor.run {
-      viewModel.searchQuery = "test"
-    }
+    viewModel.searchQuery = "test"
 
     // When
-    await MainActor.run {
-      viewModel.onSearchTextChanged()
-    }
+    viewModel.onSearchTextChanged()
     try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second to ensure timer completes
 
     // Then
-    await MainActor.run {
-      XCTAssertTrue(viewModel.movies.isEmpty)
-      XCTAssertEqual(viewModel.viewState, .error)
-      XCTAssertTrue(viewModel.showAlert)
-      XCTAssertFalse(viewModel.alertMessage.isEmpty)
-    }
+    XCTAssertTrue(viewModel.movies.isEmpty)
+    XCTAssertEqual(viewModel.viewState, .error)
+    XCTAssertTrue(viewModel.showAlert)
+    XCTAssertFalse(viewModel.alertMessage.isEmpty)
   }
 
   func testHideAlert() {
